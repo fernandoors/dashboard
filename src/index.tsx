@@ -1,17 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import Routes from "./routes";
+import GlobalStyle from "./styles/GlobalStyle";
+import configureStore from "./store";
+import { saveState } from "./store/localStorage";
+import { IStoreTypes } from "./store/reducers";
+
+const store = configureStore();
+
+store.subscribe(() => {
+  const state: IStoreTypes = store.getState();
+  saveState(state);
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <>
+        <Routes />
+        <GlobalStyle />
+      </>
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
